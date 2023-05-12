@@ -1,6 +1,4 @@
 import time
-
-import pygame
 from settings import *
 
 class Player(pygame.sprite.Sprite):
@@ -11,38 +9,25 @@ class Player(pygame.sprite.Sprite):
 
         self.direction = pygame.math.Vector2()
         self.speed = 6
-        self.jump = False
-        self.jump_count = 30
 
         self.obstacle_sprites = obstacle_sprites
 
     def input(self):
         keys = pygame.key.get_pressed()
 
-        if not self.jump:
-            if keys[pygame.K_w]:
-                self.jump = True
-                self.speed = 12
-        else:
-            if self.jump_count >= -30:
-                if self.jump_count > 0:
-                    self.direction.y = -self.jump_count ** 2
-                    self.speed -= 0.2
-                else:
-                    self.direction.y = self.jump_count ** 2
-                    self.speed += 0.2
-                self.jump_count -= 1
-            else:
-                self.jump = False
-                self.jump_count = 30
-                self.speed = 6
-
         if keys[pygame.K_d]:
-            self.direction.x = 10
+            self.direction.x = 1
         elif keys[pygame.K_a]:
-            self.direction.x = -10
+            self.direction.x = -1
         else:
             self.direction.x = 0
+
+        if keys[pygame.K_s]:
+            self.direction.y = 1
+        elif keys[pygame.K_w]:
+            self.direction.y = -1
+        else:
+            self.direction.y = 0
 
     def move(self, speed):
         if self.direction.magnitude() != 0:
@@ -54,8 +39,6 @@ class Player(pygame.sprite.Sprite):
         self.collision('vertical')
 
     def collision(self, direction):
-        obstacleabove = False
-
         if direction == 'horizontal':
             for sprite in self.obstacle_sprites:
                 if sprite.rect.colliderect(self.rect):
@@ -68,19 +51,9 @@ class Player(pygame.sprite.Sprite):
             for sprite in self.obstacle_sprites:
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.y > 0:
-                        if not obstacleabove:
-                            self.rect.bottom = sprite.rect.top
-                        else:
-                            self.direction.y = 24
-
-
+                        self.rect.bottom = sprite.rect.top
                     if self.direction.y < 0:
-                        self.jump = False
-                        self.direction.y = self.jump_count ** 2
-                        obstacleabove = True
                         self.rect.top = sprite.rect.bottom
-                else:
-                    self.direction.y = 12
 
 
     def update(self):
