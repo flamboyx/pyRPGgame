@@ -6,7 +6,7 @@ from support import import_folder
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, obstacle_sprites):
+    def __init__(self, pos, groups, obstacle_sprites, create_attack):
         super().__init__(groups)
         self.image = pygame.image.load('images/characters/main_character/down_idle/down_idle_0.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
@@ -24,6 +24,11 @@ class Player(pygame.sprite.Sprite):
         self.attack_cooldown = 400
         self.attack_time = 0
         self.obstacle_sprites = obstacle_sprites
+
+        self.create_attack = create_attack
+        self.weapon_index = 0
+        self.weapon = list(weapon_data.keys())[self.weapon_index]
+
 
     def import_player_assets(self):
         character_path = 'images/characters/main_character/'
@@ -60,6 +65,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE] and not self.attacking:
             self.attacking = True
             self.attack_time = pygame.time.get_ticks()
+            self.create_attack()
             pass
 
         if keys[pygame.K_e] and not self.attacking:
