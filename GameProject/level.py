@@ -4,6 +4,7 @@ import pygame.math
 from settings import *
 from tile import Tile
 from player import Player
+from weapon import Weapon
 from support import *
 
 
@@ -68,7 +69,10 @@ class Level:
         #             placeplayer = False
         #         j += random.randint(1, 5)
 
-        self.player = Player((300, 300), [self.visible_sprites], self.obstacle_sprites)
+        self.player = Player((300, 300), [self.visible_sprites], self.obstacle_sprites, self.create_attack)
+
+    def create_attack(self):
+        Weapon(self.player, [self.visible_sprites])
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
