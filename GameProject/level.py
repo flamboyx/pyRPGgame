@@ -40,13 +40,13 @@ class Level:
                         if style == 'boundary':
                             Tile((x, y), [self.obstacle_sprites], 'invisible')
                         if style == 'backflora':
-                            surface = graphics['flora'][int(col) + 1]
+                            surface = graphics['flora'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'flora', surface)
                         if style == 'flora':
-                            surface = graphics['flora'][int(col) + 1]
+                            surface = graphics['flora'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'flora', surface)
                         if style == 'frontflora':
-                            surface = graphics['flora'][int(col) + 1]
+                            surface = graphics['flora'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'flora', surface)
 
 
