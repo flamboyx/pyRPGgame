@@ -21,7 +21,10 @@ def import_folder(path):
     for _, __, img_files in walk(path):
         for image in img_files:
             full_path = path + '/' + image
-            image_surface = pygame.image.load(full_path).convert_alpha()
+            if 'characters' in path:
+                image_surface = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (256, 256))
+            else:
+                image_surface = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (64, 64))
             surface_list.append(image_surface)
 
     return surface_list
