@@ -15,6 +15,8 @@ class Level:
         self.visible_sprites = DepthCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
 
+        self.current_attack = None
+
         self.create_map()
 
     def create_map(self):
@@ -50,29 +52,16 @@ class Level:
                             surface = graphics['flora'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'flora', surface)
 
-
-        # rows = HEIGHT * 4 // TILESIZE + 1
-        # cols = WIDTH * 4 // TILESIZE + 1
-        #
-        # placeplayer = True
-        #
-        # for i in range(rows):
-        #     j = 0
-        #     while j < cols:
-        #         col = random.randint(0, 1)
-        #         x = j * TILESIZE
-        #         y = i * TILESIZE
-        #         if col == 1:
-        #             Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
-        #         elif col == 0 and placeplayer:
-        #             self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites)
-        #             placeplayer = False
-        #         j += random.randint(1, 5)
-
-        self.player = Player((300, 300), [self.visible_sprites], self.obstacle_sprites, self.create_attack)
+        self.player = Player((300, 300), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
 
     def create_attack(self):
-        Weapon(self.player, [self.visible_sprites])
+        self.attack_time = pygame.time.get_ticks()
+        self.current_attack = Weapon(self.player, [self.visible_sprites])
+
+    def destroy_attack(self):
+        if self.current_attack:
+            self.current_attack.kill()
+        self.current_attack = None
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
@@ -88,6 +77,7 @@ class DepthCameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
 
         self.floor_surface = pygame.image.load('images/tilemaps/ground_1.png').convert()
+        self.floor_surface = pygame.transform.scale(self.floor_surface, (self.floor_surface.get_size()[0] * 2, self.floor_surface.get_size()[1] * 2))
         self.floor_rect = self.floor_surface.get_rect(topleft=(0, 0))
 
     def custom_draw(self, player):
