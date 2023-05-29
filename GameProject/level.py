@@ -1,11 +1,13 @@
 import random
 
 import pygame.math
-from settings import *
-from tile import Tile
 from player import Player
+from tile import Tile
 from weapon import Weapon
+from ui import UI
+from settings import *
 from support import *
+
 
 
 class Level:
@@ -17,7 +19,11 @@ class Level:
 
         self.current_attack = None
 
+        # sprite setup
         self.create_map()
+
+        # user interface
+        self.ui = UI()
 
     def create_map(self):
         layouts = {
@@ -66,6 +72,7 @@ class Level:
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        self.ui.display(self.player)
 
 
 class DepthCameraGroup(pygame.sprite.Group):
