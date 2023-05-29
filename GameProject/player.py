@@ -12,19 +12,22 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(-32, -24)
 
+        # graphics
         self.import_player_assets()
         self.status = 'down_idle'
         self.frame_index = 0
         self.animation_speed = 0.15
 
+        # movement
         self.direction = pygame.math.Vector2()
-        self.speed = 6
+        self.obstacle_sprites = obstacle_sprites
 
+        # attacking
         self.attacking = False
         self.attack_cooldown = 350
         self.attack_time = 0
-        self.obstacle_sprites = obstacle_sprites
 
+        # weapon
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
         self.weapon_index = 0
@@ -32,6 +35,13 @@ class Player(pygame.sprite.Sprite):
         self.can_switch_weapon = True
         self.weapon_switch_time = None
         self.switch_duration_cooldown = 2000
+
+        # stats
+        self.stats = {'health': 100, 'energy': 60, 'attack': 10, 'magic': 4, 'speed': 6}
+        self.exp = 123
+        self.health = self.stats['health']
+        self.energy = self.stats['energy']
+        self.speed = self.stats['speed']
 
 
     def import_player_assets(self):
@@ -48,43 +58,44 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_d]:
-            self.direction.x = 1
-            self.status = 'right_walk'
-        elif keys[pygame.K_a]:
-            self.direction.x = -1
-            self.status = 'left_walk'
-        else:
-            self.direction.x = 0
-
-        if keys[pygame.K_s]:
-            self.direction.y = 1
-            self.status = 'down_walk'
-        elif keys[pygame.K_w]:
-            self.direction.y = -1
-            self.status = 'up_walk'
-        else:
-            self.direction.y = 0
-
-        if keys[pygame.K_SPACE] and not self.attacking:
-            self.attacking = True
-            self.attack_time = pygame.time.get_ticks()
-            self.create_attack()
-            pass
-
-        if keys[pygame.K_e] and not self.attacking:
-            self.attacking = True
-            self.attack_time = pygame.time.get_ticks()
-            pass
-
-        if keys[pygame.K_q] and self.can_switch_weapon:
-            self.can_switch_weapon = False
-            self.weapon_switch_time = pygame.time.get_ticks()
-            if self.weapon_index < len(list(weapon_data.keys())) - 1:
-                self.weapon_index += 1
+        if not self.attacking:
+            if keys[pygame.K_d]:
+                self.direction.x = 1
+                self.status = 'right_walk'
+            elif keys[pygame.K_a]:
+                self.direction.x = -1
+                self.status = 'left_walk'
             else:
-                self.weapon_index = 0
-            self.weapon = list(weapon_data.keys())[self.weapon_index]
+                self.direction.x = 0
+
+            if keys[pygame.K_s]:
+                self.direction.y = 1
+                self.status = 'down_walk'
+            elif keys[pygame.K_w]:
+                self.direction.y = -1
+                self.status = 'up_walk'
+            else:
+                self.direction.y = 0
+
+            if keys[pygame.K_SPACE] and not self.attacking:
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks()
+                self.create_attack()
+                pass
+
+            if keys[pygame.K_e] and not self.attacking:
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks()
+                pass
+
+            if keys[pygame.K_q] and self.can_switch_weapon:
+                self.can_switch_weapon = False
+                self.weapon_switch_time = pygame.time.get_ticks()
+                if self.weapon_index < len(list(weapon_data.keys())) - 1:
+                    self.weapon_index += 1
+                else:
+                    self.weapon_index = 0
+                self.weapon = list(weapon_data.keys())[self.weapon_index]
 
     def get_status(self):
         if self.direction.x == 0 and self.direction.y == 0:
