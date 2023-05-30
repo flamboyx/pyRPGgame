@@ -58,11 +58,19 @@ class Level:
                             surface = graphics['flora'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'flora', surface)
 
-        self.player = Player((300, 300), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
+        self.player = Player((300, 300),
+                             [self.visible_sprites],
+                             self.obstacle_sprites,
+                             self.create_attack,
+                             self.destroy_attack,
+                             self.create_magic)
 
     def create_attack(self):
         self.attack_time = pygame.time.get_ticks()
         self.current_attack = Weapon(self.player, [self.visible_sprites])
+
+    def create_magic(self, style, strength, cost):
+        print(style)
 
     def destroy_attack(self):
         if self.current_attack:
