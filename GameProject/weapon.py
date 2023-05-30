@@ -7,26 +7,7 @@ class Weapon(pygame.sprite.Sprite):
 
         # graphic
         full_path = f'images/weapons/{player.weapon}/{direction}.png'
-        if player.weapon == 'sword':
-            if direction == 'right' or direction == 'left':
-                self.image = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (64, 16))
-            elif direction == 'down' or direction == 'up':
-                self.image = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (16, 64))
-        elif player.weapon == 'scythe':
-            if direction == 'right' or direction == 'left':
-                self.image = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (74, 48))
-            elif direction == 'down' or direction == 'up':
-                self.image = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (48, 74))
-        elif player.weapon == 'spear':
-            if direction == 'right' or direction == 'left':
-                self.image = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (100, 28))
-            elif direction == 'down' or direction == 'up':
-                self.image = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (28, 100))
-        elif player.weapon == 'heavysword':
-            if direction == 'right' or direction == 'left':
-                self.image = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (92, 32))
-            elif direction == 'down' or direction == 'up':
-                self.image = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (32, 92))
+        self.image = pygame.transform.scale_by(pygame.image.load(full_path).convert_alpha(), 2)
 
         # placement
         if direction == 'right':
