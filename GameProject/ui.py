@@ -14,7 +14,15 @@ class UI:
         # convert weapon dict
         self.weapon_graphics = []
         for weapon in weapon_data.values():
-            path = weapon['graphics']
+            path = weapon['graphic']
+            weapon = pygame.transform.scale_by(pygame.image.load(path).convert_alpha(), 2)
+            self.weapon_graphics.append(weapon)
+
+        # convert magic dict
+        self.magic_graphics = []
+        for magic in magic_data.values():
+            magic = pygame.image.load(magic['graphic']).convert_alpha()
+            self.magic_graphics.append(magic)
 
     def show_bar(self, current_amount, max_amount, bg_rect, color):
         pygame.draw.rect(self.display_surface, UI_BG_COLOR, bg_rect)
@@ -40,16 +48,28 @@ class UI:
         self.display_surface.blit(text_surf, text_rect)
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, text_rect.inflate(10, 0), 2)
 
-    def selection_box(self, left, top):
+    def selection_box(self, left, top, has_switched):
         bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
         pygame.draw.rect(self.display_surface, UI_BG_COLOR, bg_rect)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, 2)
+        if has_switched:
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, bg_rect, 2)
+        else:
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, 2)
         return bg_rect
 
-    def weapon_overlay(self, weapon_index):
-        bg_rect = self.selection_box(self.display_surface.get_size()[0] - 110, 10)
-        weapon_surf = weapon_data[]
+    def weapon_overlay(self, weapon_index, has_switched):
+        bg_rect = self.selection_box(self.display_surface.get_size()[0] - 110, 10, has_switched)
+        weapon_surf = self.weapon_graphics[weapon_index]
+        weapon_rect = weapon_surf.get_rect(center = bg_rect.center)
+
         self.display_surface.blit(weapon_surf, weapon_rect)
+
+    def magic_overlay(self, magic_index, has_switched):
+        bg_rect = self.selection_box(self.display_surface.get_size()[0] - 205, 15, has_switched)
+        magic_surf = self.magic_graphics[magic_index]
+        magic_rect = magic_surf.get_rect(center = bg_rect.center)
+
+        self.display_surface.blit(magic_surf, magic_rect)
 
     def display(self, player):
         self.show_bar(player.health, player.stats['health'], self.health_bar, HEALTH_COLOR)
@@ -57,5 +77,5 @@ class UI:
 
         self.show_exp(player.exp)
 
-        self.selection_box(self.display_surface.get_size()[0] - 190, 15)
-        self.weapon_overlay(player.weapon_index)
+        self.magic_overlay(player.magic_index, not player.can_switch_magic)
+        self.weapon_overlay(player.weapon_index, not player.can_switch_weapon)
