@@ -13,7 +13,7 @@ HEALTH_BAR_HEIGHT = 30
 ENERGY_BAR_HEIGHT = 20
 HEALTH_BAR_WIDTH = 400
 ENERGY_BAR_WIDTH = 300
-ITEM_BOX_SIZE = 90
+ITEM_BOX_SIZE = 105
 UI_FONT = 'images/fonts/DotGothic16-Regular.ttf'
 UI_FONT_SIZE = 24
 
@@ -29,5 +29,8 @@ weapon_data = {
     'sword': {'cooldown': 100, 'damage': 15, 'graphic': 'images/weapons/sword/up.png'},
     'scythe': {'cooldown': 100, 'damage': 15, 'graphic': 'images/weapons/scythe/up.png'},
     'spear': {'cooldown': 100, 'damage': 15, 'graphic': 'images/weapons/spear/up.png'},
-    'heavysword': {'cooldown': 100, 'damage': 15, 'graphic': 'images/weapons/heavysword/up.png'},
-}
+    'heavysword': {'cooldown': 100, 'damage': 15, 'graphic': 'images/weapons/heavysword/up.png'}}
+
+magic_data = {
+    'flame': {'strength': 5, 'cost': 20, 'graphic': 'images/test.jpg'},
+    'heal': {'strength': 20, 'cost': 10, 'graphic': 'images/icon.png'}}
