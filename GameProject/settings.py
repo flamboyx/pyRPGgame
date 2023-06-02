@@ -34,3 +34,7 @@ weapon_data = {
 magic_data = {
     'flame': {'strength': 5, 'cost': 20, 'graphic': 'images/test.jpg'},
     'heal': {'strength': 20, 'cost': 10, 'graphic': 'images/icon.png'}}
+
+enemy_data = {
+    'monster': {'health': 100, 'exp': 100, 'damage': 20, 'attack_type': None, 'attack sound': None, 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 360,}
+}
