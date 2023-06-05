@@ -1,6 +1,7 @@
 import random
 
 import pygame.math
+from enemy import Enemy
 from player import Player
 from tile import Tile
 from weapon import Weapon
@@ -34,6 +35,7 @@ class Level:
             'backprops': import_csv_layout('map/map_village_BackProps.csv'),
             'props': import_csv_layout('map/map_village_Props.csv'),
             'houses': import_csv_layout('map/map_village_Houses.csv'),
+            'entities': import_csv_layout('map/map_village_Entities.csv')
         }
 
         graphics = {
@@ -57,13 +59,18 @@ class Level:
                         if style == 'frontflora':
                             surface = graphics['flora'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'flora', surface)
-
-        self.player = Player((300, 300),
-                             [self.visible_sprites],
-                             self.obstacle_sprites,
-                             self.create_attack,
-                             self.destroy_attack,
-                             self.create_magic)
+                        if style == 'entities':
+                            if col == '1':
+                                self.player = Player((x, y),
+                                                     [self.visible_sprites],
+                                                     self.obstacle_sprites,
+                                                     self.create_attack,
+                                                     self.destroy_attack,
+                                                     self.create_magic)
+                            else:
+                                if col == '2': monster_name = 'bat'
+                                elif col == '3': monster_name = 'jaws'
+                                Enemy(monster_name, (x, y), [self.visible_sprites], self.obstacle_sprites)
 
     def create_attack(self):
         self.attack_time = pygame.time.get_ticks()
@@ -80,6 +87,7 @@ class Level:
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        self.visible_sprites.enemy_update(self.player)
         self.ui.display(self.player)
 
 
@@ -105,3 +113,8 @@ class DepthCameraGroup(pygame.sprite.Group):
         for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)
+
+    def enemy_update(self, player):
+        enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
+        for sprite in enemy_sprites:
+            sprite.enemy_update(player)
