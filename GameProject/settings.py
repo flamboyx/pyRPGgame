@@ -36,5 +36,6 @@ magic_data = {
     'heal': {'strength': 20, 'cost': 10, 'graphic': 'images/icon.png'}}
 
 enemy_data = {
-    'monster': {'health': 100, 'exp': 100, 'damage': 20, 'attack_type': None, 'attack sound': None, 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 360,}
+    'bat': {'health': 100, 'exp': 100, 'damage': 10, 'attack_cooldown': 300, 'attack_type': None, 'attack sound': None, 'speed': 5, 'resistance': 5, 'attack_radius': 40, 'notice_radius': 480},
+    'jaws': {'health': 200, 'exp': 150, 'damage': 30, 'attack_cooldown': 400, 'attack_type': None, 'attack sound': None, 'speed': 2, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 300}
 }
