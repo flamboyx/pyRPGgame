@@ -23,6 +23,8 @@ def import_folder(path):
             full_path = path + '/' + image
             if 'characters' in path:
                 image_surface = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (256, 256))
+            elif 'enemies' in path:
+                image_surface = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (128, 128))
             else:
                 image_surface = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (64, 64))
             surface_list.append(image_surface)
