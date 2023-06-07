@@ -15,10 +15,14 @@ class Level:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
 
+        # sprite group setup
         self.visible_sprites = DepthCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
 
+        # attack sprites
         self.current_attack = None
+        self.attack_sprites = pygame.sprite.Group()
+        self.attackable_sprites = pygame.sprite.Group()
 
         # sprite setup
         self.create_map()
@@ -52,7 +56,10 @@ class Level:
                             Tile((x, y), [self.obstacle_sprites], 'invisible')
                         if style == 'backflora':
                             surface = graphics['flora'][int(col)]
-                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'flora', surface)
+                            Tile((x, y),
+                                 [self.visible_sprites, self.obstacle_sprites, self.attackable_sprites],
+                                 'flora',
+                                 surface)
                         if style == 'flora':
                             surface = graphics['flora'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'flora', surface)
@@ -70,11 +77,13 @@ class Level:
                             else:
                                 if col == '2': monster_name = 'bat'
                                 elif col == '3': monster_name = 'jaws'
-                                Enemy(monster_name, (x, y), [self.visible_sprites], self.obstacle_sprites)
+                                Enemy(monster_name,
+                                      (x, y),
+                                      [self.visible_sprites, self.attackable_sprites],
+                                      self.obstacle_sprites, self.damage_player)
 
     def create_attack(self):
-        self.attack_time = pygame.time.get_ticks()
-        self.current_attack = Weapon(self.player, [self.visible_sprites])
+        self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
 
     def create_magic(self, style, strength, cost):
         print(style)
@@ -84,10 +93,27 @@ class Level:
             self.current_attack.kill()
         self.current_attack = None
 
+    def player_attack_logic(self):
+        if self.attack_sprites:
+            for attack_sprite in self.attack_sprites:
+                collision_sprites = pygame.sprite.spritecollide(attack_sprite, self.attackable_sprites, False)
+                if collision_sprites:
+                    for target_sprite in collision_sprites:
+                        if target_sprite.sprite_type == 'enemy':
+                            target_sprite.get_damage(self.player, attack_sprite.sprite_type)
+
+    def damage_player(self, amount, attack_type):
+        if self.player.vulnerable:
+            self.player.health -= amount
+            self.player.vulnerable = False
+            self.player.hurt_time = pygame.time.get_ticks()
+            # spawn particles
+
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
         self.visible_sprites.enemy_update(self.player)
+        self.player_attack_logic()
         self.ui.display(self.player)
 
 
@@ -100,7 +126,9 @@ class DepthCameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
 
         self.floor_surface = pygame.image.load('images/tilemaps/ground_1.png').convert()
-        self.floor_surface = pygame.transform.scale(self.floor_surface, (self.floor_surface.get_size()[0] * 2, self.floor_surface.get_size()[1] * 2))
+        self.floor_surface = pygame.transform.scale(self.floor_surface,
+                                                    (self.floor_surface.get_size()[0] * 2,
+                                                     self.floor_surface.get_size()[1] * 2))
         self.floor_rect = self.floor_surface.get_rect(topleft=(0, 0))
 
     def custom_draw(self, player):
@@ -115,6 +143,7 @@ class DepthCameraGroup(pygame.sprite.Group):
             self.display_surface.blit(sprite.image, offset_pos)
 
     def enemy_update(self, player):
-        enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
+        enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, 'sprite_type')
+                         and sprite.sprite_type == 'enemy']
         for sprite in enemy_sprites:
             sprite.enemy_update(player)
