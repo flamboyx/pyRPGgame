@@ -43,11 +43,16 @@ class Player(Entity):
         self.magic_switch_time = None
 
         # stats
-        self.stats = {'health': 100, 'energy': 60, 'attack': 10, 'magic': 4, 'speed': 6}
+        self.stats = {'health': 200, 'energy': 60, 'attack': 10, 'magic': 4, 'speed': 6}
         self.exp = 123
         self.health = self.stats['health']
         self.energy = self.stats['energy']
         self.speed = self.stats['speed']
+
+        # damage timer
+        self.vulnerable = True
+        self.hurt_time = None
+        self.invulnerability_duration = 300
 
     def import_player_assets(self):
         character_path = 'images/characters/main_character/'
@@ -143,7 +148,7 @@ class Player(Entity):
         current_time = pygame.time.get_ticks()
 
         if self.attacking:
-            if current_time - self.attack_time >= self.attack_cooldown:
+            if current_time - self.attack_time >= self.attack_cooldown + weapon_data[self.weapon]['cooldown']:
                 self.attacking = False
                 self.destroy_attack()
 
@@ -155,8 +160,13 @@ class Player(Entity):
             if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
                 self.can_switch_magic = True
 
+        if not self.vulnerable:
+            if current_time - self.hurt_time >= self.invulnerability_duration:
+                self.vulnerable = True
+
     def animate(self):
         animation = self.animations[self.status]
+
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
             self.frame_index = 0
@@ -164,10 +174,21 @@ class Player(Entity):
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
 
+        if not self.vulnerable:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
+
+    def get_full_weapon_damage(self):
+        base_damage = self.stats['attack']
+        weapon_damage = weapon_data[self.weapon]['damage']
+
+        return base_damage + weapon_damage
 
     def update(self):
         self.input()
-        self.cooldowns()
+        self.cooldowns  ()
         self.get_status()
         self.animate()
         self.move(self.speed)
