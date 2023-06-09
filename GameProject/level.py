@@ -9,6 +9,7 @@ from ui import UI
 from particles import AnimationPlayer
 from settings import *
 from support import *
+from random import randint
 
 
 
@@ -121,7 +122,8 @@ class Level:
                     for target_sprite in collision_sprites:
                         if target_sprite.sprite_type == 'grass':
                             pos = target_sprite.rect.center
-                            self.animation_player.create_grass_particles(pos, [self.visible_sprites])
+                            for grass in range(randint(2, 4)):
+                                self.animation_player.create_grass_particles(pos, [self.visible_sprites])
                             target_sprite.kill()
                         else:
                             target_sprite.get_damage(self.player, attack_sprite.sprite_type)
