@@ -14,6 +14,7 @@ class Enemy(Entity):
         self.import_graphics(monster_name)
         self.status = 'idle'
         self.image = self.animations[self.status][self.frame_index]
+        self.update_on = False
 
         # movement
         self.rect = self.image.get_rect(topleft = pos)
@@ -74,6 +75,11 @@ class Enemy(Entity):
         else:
             self.status = 'idle'
 
+        if distance <= max(WIDTH, HEIGHT):
+            self.update_on = True
+        else:
+            self.update_on = False
+
     def actions(self, player):
         if self.status == 'attack':
             self.attack_time = pygame.time.get_ticks()
@@ -132,11 +138,12 @@ class Enemy(Entity):
 
 
     def update(self):
-        self.hit_reaction()
-        self.move(self.speed)
-        self.animate()
-        self.cooldowns()
-        self.check_death()
+        if self.update_on:
+            self.hit_reaction()
+            self.move(self.speed)
+            self.animate()
+            self.cooldowns()
+            self.check_death()
 
     def enemy_update(self, player):
         self.get_status(player)
