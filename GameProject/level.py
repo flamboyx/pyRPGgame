@@ -48,7 +48,7 @@ class Level:
             'flora': import_folder('images/graphics/flora')
         }
 
-        obstacles = []
+        free_space = []
 
         for style, layout in layouts.items():
             for row_index, row in enumerate(layout):
@@ -58,9 +58,11 @@ class Level:
                         y = row_index * TILESIZE
                         if style == 'boundary':
                             Tile((x, y), [self.obstacle_sprites], 'invisible')
+
                         if style == 'backflora':
                             surface = graphics['flora'][int(col)]
-                            if int(col) in obstacles:
+
+                            if int(col) not in free_space:
                                 Tile((x, y),
                                      [self.visible_sprites, self.obstacle_sprites],
                                      'flora',
@@ -70,9 +72,11 @@ class Level:
                                      [self.visible_sprites],
                                      'flora',
                                      surface)
+
                         if style == 'flora':
                             surface = graphics['flora'][int(col)]
-                            if int(col) in obstacles:
+
+                            if int(col) not in free_space:
                                 Tile((x, y),
                                      [self.visible_sprites, self.obstacle_sprites],
                                      'flora',
@@ -82,9 +86,11 @@ class Level:
                                      [self.visible_sprites],
                                      'flora',
                                      surface)
+
                         if style == 'frontflora':
                             surface = graphics['flora'][int(col)]
-                            if int(col) in obstacles:
+
+                            if int(col) not in free_space:
                                 Tile((x, y),
                                      [self.visible_sprites, self.obstacle_sprites],
                                      'flora',
@@ -94,12 +100,15 @@ class Level:
                                      [self.visible_sprites],
                                      'flora',
                                      surface)
+
                         if style == 'grass':
                             surface = graphics['flora'][int(col)]
+
                             Tile((x, y),
                                  [self.visible_sprites, self.obstacle_sprites, self.attackable_sprites],
                                  'grass',
                                  surface)
+
                         if style == 'entities':
                             if col == '1':
                                 self.player = Player((x, y),
@@ -111,11 +120,13 @@ class Level:
                             else:
                                 if col == '2': monster_name = 'bat'
                                 elif col == '3': monster_name = 'jaws'
+
                                 Enemy(monster_name,
                                       (x, y),
                                       [self.visible_sprites, self.attackable_sprites],
                                       self.obstacle_sprites,
                                       self.damage_player)
+
         self.player = Player((100, 100),
                              [self.visible_sprites],
                              self.obstacle_sprites,
@@ -153,7 +164,7 @@ class Level:
             self.player.health -= amount
             self.player.vulnerable = False
             self.player.hurt_time = pygame.time.get_ticks()
-            # spawn particles
+            self.animation_player.create_particles(attack_type, self.player.rect.center, [self.visible_sprites])
 
     def run(self):
         self.visible_sprites.custom_draw(self.player)
