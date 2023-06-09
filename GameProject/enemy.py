@@ -95,11 +95,11 @@ class Enemy(Entity):
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
 
-        if not self.vulnerable:
-            alpha = self.wave_value()
-            self.image.set_alpha(alpha)
-        else:
-            self.image.set_alpha(255)
+        # if not self.vulnerable:
+        #     alpha = self.wave_value()
+        #     self.image.set_alpha(alpha)
+        # else:
+        #     self.image.set_alpha(255)
 
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
@@ -128,6 +128,8 @@ class Enemy(Entity):
     def hit_reaction(self):
         if not self.vulnerable:
             self.direction *= -self.resistance
+            self.status = 'hit'
+
 
     def update(self):
         self.hit_reaction()
