@@ -48,6 +48,8 @@ class Level:
             'flora': import_folder('images/graphics/flora')
         }
 
+        obstacles = []
+
         for style, layout in layouts.items():
             for row_index, row in enumerate(layout):
                 for col_index, col in enumerate(row):
@@ -58,22 +60,40 @@ class Level:
                             Tile((x, y), [self.obstacle_sprites], 'invisible')
                         if style == 'backflora':
                             surface = graphics['flora'][int(col)]
-                            Tile((x, y),
-                                 [self.visible_sprites, self.obstacle_sprites],
-                                 'flora',
-                                 surface)
+                            if int(col) in obstacles:
+                                Tile((x, y),
+                                     [self.visible_sprites, self.obstacle_sprites],
+                                     'flora',
+                                     surface)
+                            else:
+                                Tile((x, y),
+                                     [self.visible_sprites],
+                                     'flora',
+                                     surface)
                         if style == 'flora':
                             surface = graphics['flora'][int(col)]
-                            Tile((x, y),
-                                 [self.visible_sprites, self.obstacle_sprites],
-                                 'flora',
-                                 surface)
+                            if int(col) in obstacles:
+                                Tile((x, y),
+                                     [self.visible_sprites, self.obstacle_sprites],
+                                     'flora',
+                                     surface)
+                            else:
+                                Tile((x, y),
+                                     [self.visible_sprites],
+                                     'flora',
+                                     surface)
                         if style == 'frontflora':
                             surface = graphics['flora'][int(col)]
-                            Tile((x, y),
-                                 [self.visible_sprites, self.obstacle_sprites],
-                                 'flora',
-                                 surface)
+                            if int(col) in obstacles:
+                                Tile((x, y),
+                                     [self.visible_sprites, self.obstacle_sprites],
+                                     'flora',
+                                     surface)
+                            else:
+                                Tile((x, y),
+                                     [self.visible_sprites],
+                                     'flora',
+                                     surface)
                         if style == 'grass':
                             surface = graphics['flora'][int(col)]
                             Tile((x, y),
