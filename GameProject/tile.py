@@ -8,6 +8,6 @@ class Tile(pygame.sprite.Sprite):
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
         if sprite_type == 'frontflora'  or 'backflora':
-            self.hitbox = self.rect.inflate(-16, -24)
+            self.hitbox = self.rect.inflate(-12, 24)
         else:
-            self.hitbox = self.rect.inflate(-8, -8)
+            self.hitbox = self.rect.inflate(-8, -12)
