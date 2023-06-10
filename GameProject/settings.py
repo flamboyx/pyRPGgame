@@ -18,12 +18,18 @@ UI_FONT = 'images/fonts/DotGothic16-Regular.ttf'
 UI_FONT_SIZE = 24
 
 UI_BG_COLOR = '#3B2608'
+UPGRADE_BG_COLOR_SELECTED = '#FFD073'
 UI_BORDER_COLOR = '#2A5234'
 TEXT_COLOR = '#DED4AD'
+TEXT_COLOR_SELECTED = 'black'
 
 HEALTH_COLOR = '#AB0000'
 ENERGY_COLOR = '#FFFF3B'
 UI_BORDER_COLOR_ACTIVE = '#E6FFE6'
+
+BAR_COLOR = '#FFBF40'
+BAR_COLOR_SELECTED = '#FFAA00'
+
 
 weapon_data = {
     'sword': {'cooldown': 100, 'damage': 20, 'graphic': 'images/weapons/sword/up.png'},
