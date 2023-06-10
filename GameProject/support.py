@@ -25,6 +25,8 @@ def import_folder(path):
                 image_surface = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (256, 256))
             elif 'enemies' in path:
                 image_surface = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (128, 128))
+            elif 'particles' in path and 'grass' not in path:
+                image_surface = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (128, 128))
             else:
                 image_surface = pygame.transform.scale(pygame.image.load(full_path).convert_alpha(), (64, 64))
             surface_list.append(image_surface)
