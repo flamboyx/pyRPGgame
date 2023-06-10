@@ -1,3 +1,4 @@
+import pygame
 from settings import *
 from level import Level
 
@@ -7,14 +8,13 @@ class Game:
 
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
         self.clock = pygame.time.Clock()
-        pygame.display.set_caption("My Game")
+        pygame.display.set_caption("Delza")
         self.icon = pygame.image.load("images/icon.png").convert_alpha()
         pygame.display.set_icon(self.icon)
         self.level = Level()
 
     def run(self):
         running = True
-        fullscreenmode = True
 
         while running:
             self.screen.fill('Black')
@@ -30,13 +30,8 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         running = False
                         pygame.quit()
-                    if event.key == pygame.K_RETURN and pygame.key.get_mods() and pygame.KMOD_RALT:
-                        if fullscreenmode:
-                            screen = pygame.display.set_mode((WIDTH // 2, HEIGHT // 2), pygame.RESIZABLE)
-                            fullscreenmode = False
-                        else:
-                            screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
-                            fullscreenmode = True
+                    elif event.key == pygame.K_m:
+                        self.level.toggle_menu()
 
 
 if __name__ == '__main__':
