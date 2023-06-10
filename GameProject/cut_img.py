@@ -5,7 +5,7 @@ from settings import *
 pygame.init()
 screen = pygame.display.set_mode((300, 300))
 # one image -> 7 subsurfaces
-sheet = pygame.image.load('images/characters/main_character/up_attack/_up attack.png').convert_alpha()
+sheet = pygame.image.load('images/characters/main_character/up_attack/up_attack.png').convert_alpha()
 imgs = []
 for x in range(2):
     for y in range(2):
