@@ -32,12 +32,14 @@ weapon_data = {
     'heavysword': {'cooldown': 300, 'damage': 40, 'graphic': 'images/weapons/heavysword/up.png'}}
 
 magic_data = {
-    'flame': {'strength': 5, 'cost': 20, 'graphic': 'images/test.jpg'},
-    'heal': {'strength': 20, 'cost': 10, 'graphic': 'images/icon.png'}}
+    'ball': {'strength': 20, 'cost': 25, 'graphic': 'images/spells/ball.png'},
+    'heal': {'strength': 20, 'cost': 15, 'graphic': 'images/spells/heal.png'},
+    'tentacles': {'strength': 15, 'cost': 20, 'graphic': 'images/spells/tentacles.png'}}
 
 enemy_data = {
-    'bat': {'health': 100, 'exp': 100, 'damage': 10, 'attack_cooldown': 300, 'attack_type': None,
+    'bat': {'health': 100, 'exp': 100, 'damage': 10, 'attack_cooldown': 300, 'attack_type': 'dark_eye',
             'attack sound': None, 'speed': 5, 'resistance': 5, 'attack_radius': 40, 'notice_radius': 480},
-    'jaws': {'health': 200, 'exp': 150, 'damage': 30, 'attack_cooldown': 500, 'attack_type': None,
-             'attack sound': None, 'speed': 2, 'resistance': 2, 'attack_radius': 70, 'notice_radius': 340}
-}
+    'jaws': {'health': 200, 'exp': 150, 'damage': 30, 'attack_cooldown': 900, 'attack_type': 'bite',
+             'attack sound': None, 'speed': 2, 'resistance': 2, 'attack_radius': 70, 'notice_radius': 340},
+    'poo': {'health': 150, 'exp': 200, 'damage': 40, 'attack_cooldown': 700, 'attack_type': 'goo',
+            'attack sound': None, 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 420}}
