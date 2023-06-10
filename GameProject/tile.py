@@ -9,5 +9,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         if sprite_type == 'frontflora'  or 'backflora':
             self.hitbox = self.rect.inflate(-12, 24)
+        elif sprite_type == 'invisible':
+            self.hitbox = self.rect.inflate(8, 24)
         else:
             self.hitbox = self.rect.inflate(-8, -12)
