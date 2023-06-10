@@ -2,9 +2,10 @@ import pygame
 from settings import *
 from entity import Entity
 from support import import_folder
+from particles import reflect_images
 
 class Enemy(Entity):
-    def __init__(self, monster_name, pos, groups, obstacle_sprites, damage_player):
+    def __init__(self, monster_name, pos, groups, obstacle_sprites, damage_player, trigger_death_particles, add_exp):
 
         # general setup
         super().__init__(groups)
@@ -18,7 +19,7 @@ class Enemy(Entity):
 
         # movement
         self.rect = self.image.get_rect(topleft = pos)
-        self.hitbox = self.rect.inflate(-10, -10)
+        self.hitbox = self.rect.inflate(-16, -24)
         self.obstacle_sprites = obstacle_sprites
 
         # stats
@@ -38,6 +39,8 @@ class Enemy(Entity):
         self.can_attack = True
         self.attack_time = None
         self.damage_player = damage_player
+        self.trigger_death_particles = trigger_death_particles
+        self.add_exp = add_exp
 
         # invincibility timer
         self.vulnerable = True
@@ -73,7 +76,10 @@ class Enemy(Entity):
         elif distance <= self.notice_radius:
             self.status = 'move'
         else:
-            self.status = 'idle'
+            if 'left' in self.status:
+                self.status = 'idle_left'
+            else:
+                self.status = 'idle'
 
         if distance <= max(WIDTH, HEIGHT):
             self.update_on = True
@@ -83,14 +89,23 @@ class Enemy(Entity):
     def actions(self, player):
         if self.status == 'attack':
             self.attack_time = pygame.time.get_ticks()
-            self.damage_player(self.damage, self.attack_type)
+            if self.direction[0] < 0:
+                self.status = 'attack_left'
+                self.damage_player(self.damage, self.attack_type + '_left')
+            else:
+                self.damage_player(self.damage, self.attack_type)
         elif self.status == 'move':
             self.direction = self.get_player_distance_direction(player)[1]
+            if self.direction[0] < 0:
+                self.status = 'move_left'
         else:
             self.direction = pygame.math.Vector2()
 
     def animate(self):
-        animation = self.animations[self.status]
+        if 'left' in self.status:
+            animation = reflect_images(self.animations[self.status[0:-5]], 1, 0)
+        else:
+            animation = self.animations[self.status]
 
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
@@ -100,12 +115,6 @@ class Enemy(Entity):
 
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
-
-        # if not self.vulnerable:
-        #     alpha = self.wave_value()
-        #     self.image.set_alpha(alpha)
-        # else:
-        #     self.image.set_alpha(255)
 
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
@@ -123,18 +132,29 @@ class Enemy(Entity):
             if attack_type == 'weapon':
                 self.health -= player.get_full_weapon_damage()
             else:
-                pass
+                self.health -= player.get_full_magic_damage()
             self.hit_time = pygame.time.get_ticks()
             self.vulnerable = False
 
     def check_death(self):
         if self.health <= 0:
+            left = True
+            if self.direction[0] < 0:
+                left = False
             self.kill()
+            if left:
+                self.trigger_death_particles(self.rect.center, self.monster_name + '_left')
+            else:
+                self.trigger_death_particles(self.rect.center, self.monster_name)
+            self.add_exp(self.exp)
 
     def hit_reaction(self):
         if not self.vulnerable:
             self.direction *= -self.resistance
-            self.status = 'hit'
+            if self.direction[0] < 0:
+                self.status = 'hit'
+            else:
+                self.status = 'hit_left'
 
 
     def update(self):
