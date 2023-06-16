@@ -47,7 +47,7 @@ class MagicPlayer:
                     self.animation_player.create_particles(f'ball_impulse{status}', (player.rect.centerx + offset_x, player.rect.centery), groups)
                 else:
                     offset_y = (direction.y * i) * TILESIZE
-                    self.animation_player.create_particles(f'ball_{i}{status}', (player.rect.centerx, player.rect.centery), groups)
+                    self.animation_player.create_particles(f'ball_{i}{status}', (player.rect.centerx, player.rect.centery + offset_y), groups)
                     self.animation_player.create_particles(f'ball_impulse{status}', (player.rect.centerx, player.rect.centery + offset_y), groups)
 
     def tentacles(self, player, cost, groups):
