@@ -124,7 +124,7 @@ class Item:
         if player.exp >= player.upgrade_cost[upgrade_attribute]\
                 and player.stats[upgrade_attribute] < player.max_stats[upgrade_attribute]:
             player.exp -= player.upgrade_cost[upgrade_attribute]
-            player.stats[upgrade_attribute] *= 1.3
+            player.stats[upgrade_attribute] *= 1.2
             player.upgrade_cost[upgrade_attribute] *= 1.5
 
         if player.stats[upgrade_attribute] > player.max_stats[upgrade_attribute]:
