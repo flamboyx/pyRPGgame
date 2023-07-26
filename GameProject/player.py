@@ -26,8 +26,9 @@ class Player(Entity):
 
         # attacking
         self.attacking = False
-        self.attack_cooldown = 350
+        self.attack_cooldown = 200
         self.attack_time = 0
+        self.can_attack = True
 
         # weapon
         self.create_attack = create_attack
@@ -47,8 +48,8 @@ class Player(Entity):
 
         # stats
         self.stats = {'health': 200, 'energy': 60, 'attack': 10, 'magic': 4, 'speed': 6, 'recovery': 3}
-        self.max_stats = {'health': 500, 'energy': 360, 'attack': 50, 'magic': 20, 'speed': 10, 'recovery': 5}
-        self.update_cost = {'health': 100, 'energy': 100, 'attack': 150, 'magic': 150, 'speed': 200, 'recovery': 200}
+        self.max_stats = {'health': 500, 'energy': 360, 'attack': 50, 'magic': 20, 'speed': 10, 'recovery': 9}
+        self.upgrade_cost = {'health': 100, 'energy': 100, 'attack': 150, 'magic': 150, 'speed': 200, 'recovery': 200}
         self.exp = 200
         self.health = self.stats['health']
         self.energy = self.stats['energy']
@@ -92,12 +93,13 @@ class Player(Entity):
             else:
                 self.direction.y = 0
 
-            if keys[pygame.K_SPACE] and not self.attacking:
+            if keys[pygame.K_SPACE] and not self.attacking and self.can_attack:
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
                 self.create_attack()
+                self.can_attack = False
 
-            if keys[pygame.K_e] and not self.attacking:
+            if keys[pygame.K_e] and not self.attacking and self.can_attack:
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
                 style = list(magic_data.keys())[self.magic_index]
@@ -105,6 +107,7 @@ class Player(Entity):
                 cost = list(magic_data.values())[self.magic_index]['cost']
 
                 self.create_magic(style, strength, cost)
+                self.can_attack = False
 
             if keys[pygame.K_q] and self.can_switch_weapon:
                 self.can_switch_weapon = False
@@ -140,19 +143,20 @@ class Player(Entity):
                     self.status = self.status.replace('_idle', '_attack')
                 elif 'walk' in self.status:
                     self.status = self.status.replace('_walk', '_attack')
-                else:
-                    self.status += '_attack'
         else:
             if 'attack' in self.status:
                 self.status = self.status.replace('_attack', '_idle')
 
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
+        keys = pygame.key.get_pressed()
 
         if self.attacking:
             if current_time - self.attack_time >= self.attack_cooldown + weapon_data[self.weapon]['cooldown']:
-                self.attacking = False
                 self.destroy_attack()
+                self.attacking = False
+        elif not keys[pygame.K_SPACE] and not keys[pygame.K_e]:
+            self.can_attack = True
 
         if not self.can_switch_weapon:
             if current_time - self.weapon_switch_time >= self.switch_duration_cooldown:
@@ -197,7 +201,7 @@ class Player(Entity):
         return list(self.stats.values())[index]
 
     def get_cost_by_index(self, index):
-        return list(self.update_cost.values())[index]
+        return list(self.upgrade_cost.values())[index]
 
     def energy_recovery(self):
         if self.energy < self.stats['energy']:
@@ -210,5 +214,5 @@ class Player(Entity):
         self.cooldowns  ()
         self.get_status()
         self.animate()
-        self.move(self.speed)
+        self.move(self.stats['speed'])
         self.energy_recovery()
