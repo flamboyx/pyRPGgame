@@ -19,7 +19,7 @@ class Game:
         self.start_time = 0
         self.end_time = 0
 
-        with open('saves/record.txt') as f:
+        with open('saves/records.txt') as f:
             self.record = min([float(t) for t in f])
         f.close()
 
@@ -217,7 +217,7 @@ class Game:
         if self.record > win_time:
             self.record = win_time
             color = BAR_COLOR_SELECTED
-            with open('saves/record.txt', 'a') as f:
+            with open('saves/records.txt', 'a') as f:
                 print(self.record, file=f)
             f.close()
 
