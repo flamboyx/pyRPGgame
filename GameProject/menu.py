@@ -16,6 +16,7 @@ class Button:
 
         self.image = pygame.Surface((self.width, self.height))
         self.image.fill(self.bg)
+        pygame.draw.rect(self.image, UI_BORDER_COLOR, self.image.get_rect(), 4)
 
         self.rect = self.image.get_rect()
         self.rect.x = self.x
@@ -31,4 +32,3 @@ class Button:
                 return True
             return False
         return False
-
