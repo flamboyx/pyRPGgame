@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 
+
 class Button:
     def __init__(self, x, y, width, height, fg, bg, content, fontsize):
         self.font = pygame.font.Font(UI_FONT, fontsize)
