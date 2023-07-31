@@ -13,10 +13,13 @@ from settings import *
 from support import *
 from random import randint
 
+
 class Level:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
         self.game_paused = False
+        self.game_over = False
+        self.win = False
 
         # sprite group setup
         self.visible_sprites = DepthCameraGroup()
@@ -37,7 +40,6 @@ class Level:
         # particles
         self.animation_player = AnimationPlayer()
         self.magic_player = MagicPlayer(self.animation_player)
-
 
     def create_map(self):
         layouts = {
@@ -124,9 +126,12 @@ class Level:
                                                      self.destroy_attack,
                                                      self.create_magic)
                             else:
-                                if col == '2': monster_name = 'bat'
-                                elif col == '3': monster_name = 'jaws'
-                                elif col == '4': monster_name = 'poo'
+                                if col == '2':
+                                    monster_name = 'bat'
+                                elif col == '3':
+                                    monster_name = 'jaws'
+                                elif col == '4':
+                                    monster_name = 'poo'
 
                                 Enemy(monster_name,
                                       (x, y),
@@ -135,6 +140,7 @@ class Level:
                                       self.damage_player,
                                       self.trigger_death_particles,
                                       self.add_exp)
+
 
         self.player = Player((100, 100),
                              [self.visible_sprites],
@@ -191,6 +197,14 @@ class Level:
     def toggle_menu(self):
         self.game_paused = not self.game_paused
 
+    def check_death(self):
+        if self.player.health <= 0:
+            self.game_over = True
+
+    def check_win(self):
+        if not self.visible_sprites.enemies_left:
+            self.win = True
+
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.ui.display(self.player)
@@ -201,16 +215,20 @@ class Level:
             self.visible_sprites.update()
             self.visible_sprites.enemy_update(self.player)
             self.player_attack_logic()
-
+            self.check_death()
+            self.check_win()
 
 
 class DepthCameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
+        self.floor_offset_pos = (0, 0)
         self.display_surface = pygame.display.get_surface()
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
+
+        self.enemies_left = True
 
         self.floor_surface = pygame.image.load('images/tilemaps/ground_2.bmp').convert()
         self.floor_surface = pygame.transform.scale(self.floor_surface,
@@ -223,6 +241,7 @@ class DepthCameraGroup(pygame.sprite.Group):
         self.offset.y = player.rect.centery - self.half_height
 
         floor_offset_pos = self.floor_rect.topleft - self.offset
+
         self.display_surface.blit(self.floor_surface, floor_offset_pos)
 
         for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
@@ -232,5 +251,9 @@ class DepthCameraGroup(pygame.sprite.Group):
     def enemy_update(self, player):
         enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite, 'sprite_type')
                          and sprite.sprite_type == 'enemy']
+
+        if len(enemy_sprites) == 0:
+            self.enemies_left = False
+
         for sprite in enemy_sprites:
             sprite.enemy_update(player)
