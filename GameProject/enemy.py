@@ -4,6 +4,7 @@ from entity import Entity
 from support import import_folder
 from particles import reflect_images
 
+
 class Enemy(Entity):
     def __init__(self, monster_name, pos, groups, obstacle_sprites, damage_player, trigger_death_particles, add_exp):
 
@@ -18,7 +19,7 @@ class Enemy(Entity):
         self.update_on = False
 
         # movement
-        self.rect = self.image.get_rect(topleft = pos)
+        self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(-16, -24)
         self.obstacle_sprites = obstacle_sprites
 
@@ -47,7 +48,6 @@ class Enemy(Entity):
         self.hit_time = None
         self.invincibility_duration = 300
 
-
     def import_graphics(self, name):
         self.animations = {'idle': [], 'move': [], 'attack': [], 'hit': []}
         main_path = f'images/enemies/{name}/'
@@ -66,7 +66,7 @@ class Enemy(Entity):
         else:
             direction = pygame.math.Vector2()
 
-        return(distance, direction)
+        return distance, direction
 
     def get_status(self, player):
         distance = self.get_player_distance_direction(player)[0]
@@ -114,7 +114,7 @@ class Enemy(Entity):
             self.frame_index = 0
 
         self.image = animation[int(self.frame_index)]
-        self.rect = self.image.get_rect(center = self.hitbox.center)
+        self.rect = self.image.get_rect(center=self.hitbox.center)
 
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
@@ -155,7 +155,6 @@ class Enemy(Entity):
                 self.status = 'hit'
             else:
                 self.status = 'hit_left'
-
 
     def update(self):
         if self.update_on:
