@@ -227,7 +227,7 @@ class Game:
         bm = ''
 
         if win_time >= 60 * 60:
-            hours = win_time // 3600
+            hours = int(win_time // 3600)
             win_time %= 3600
 
             if hours > 9:
@@ -235,7 +235,7 @@ class Game:
             else:
                 h = '0' + str(hours) + 'h:'
         if win_time >= 60:
-            mins = win_time // 60
+            mins = int(win_time // 60)
             win_time %= 60
 
             if mins > 9:
