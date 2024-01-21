@@ -9,7 +9,7 @@ from support import import_folder
 class Player(Entity):
     def __init__(self, pos, groups, obstacle_sprites, create_attack, destroy_attack, create_magic):
 
-        #general setup
+        # general setup
         super().__init__(groups)
         self.image = pygame.image.load('images/characters/main_character/down_idle/down_idle_0.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
@@ -19,6 +19,7 @@ class Player(Entity):
         # graphics
         self.import_player_assets()
         self.status = 'down_idle'
+        self.frame_index = 0
 
         # movement
         self.direction = pygame.math.Vector2()
@@ -69,7 +70,6 @@ class Player(Entity):
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = import_folder(full_path)
-
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -178,7 +178,7 @@ class Player(Entity):
             self.frame_index = 0
 
         self.image = animation[int(self.frame_index)]
-        self.rect = self.image.get_rect(center = self.hitbox.center)
+        self.rect = self.image.get_rect(center=self.hitbox.center)
 
         if not self.vulnerable:
             alpha = self.wave_value()
@@ -195,6 +195,7 @@ class Player(Entity):
     def get_full_magic_damage(self):
         base_damage = self.stats['magic']
         spell_damage = magic_data[self.magic]['strength']
+
         return base_damage + spell_damage
 
     def get_value_by_index(self, index):
@@ -211,7 +212,7 @@ class Player(Entity):
 
     def update(self):
         self.input()
-        self.cooldowns  ()
+        self.cooldowns()
         self.get_status()
         self.animate()
         self.move(self.stats['speed'])

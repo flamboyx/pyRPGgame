@@ -199,6 +199,7 @@ class Level:
 
     def check_death(self):
         if self.player.health <= 0:
+            self.player.kill()
             self.game_over = True
 
     def check_win(self):
