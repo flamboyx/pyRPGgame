@@ -1,10 +1,4 @@
-![image](https://github.com/user-attachments/assets/45fd61c0-27f9-4bc7-a53d-f9705d7b5ada)Проект «Без названия» 
-
- 
-
-Версия 0.1 
-
-05.05.2023 
+Проект «Delza» 
 
 
  
@@ -16,6 +10,11 @@
 ![image](https://github.com/user-attachments/assets/c3ea8cd3-d615-4fe5-9994-efd7fa803318)
 ![image](https://github.com/user-attachments/assets/4d1e8592-f982-42c7-9fdc-52e39dc5aeb0)
 
+
+
+Версия 0.1 
+
+05.05.2023 
 
 
 1. Спецификация 
