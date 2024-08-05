@@ -1,4 +1,4 @@
-Проект «Без названия» 
+![image](https://github.com/user-attachments/assets/45fd61c0-27f9-4bc7-a53d-f9705d7b5ada)Проект «Без названия» 
 
  
 
@@ -6,12 +6,17 @@
 
 05.05.2023 
 
- 
- 
 
-Трепаченко Тимофей 
+ 
+![image](https://github.com/user-attachments/assets/de92991b-699c-4a3e-a7fd-a21514203b07)
+![image](https://github.com/user-attachments/assets/6470ac43-7878-477d-9bb5-829d836d540b)
+![image](https://github.com/user-attachments/assets/6f807ac3-0de5-471b-8290-c40383dea0e8)
+![image](https://github.com/user-attachments/assets/5b92dcc2-dc79-4d07-b16a-ecec589e6723)
+![image](https://github.com/user-attachments/assets/4b00e9e5-ad93-4328-946a-622f6d0b145f)
+![image](https://github.com/user-attachments/assets/c3ea8cd3-d615-4fe5-9994-efd7fa803318)
+![image](https://github.com/user-attachments/assets/4d1e8592-f982-42c7-9fdc-52e39dc5aeb0)
 
-Марьян Екатерина 
+
 
 1. Спецификация 
 
