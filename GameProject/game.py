@@ -46,11 +46,11 @@ class Game:
             pygame.display.update()
             self.clock.tick(FPS)
 
-            if self.level.game_over:
-                self.game_over_screen()
-
             if self.level.win:
                 self.win_screen()
+
+            if self.level.game_over:
+                self.game_over_screen()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -341,3 +341,4 @@ if __name__ == '__main__':
             game.game_over_screen()
         while game.win:
             game.win_screen()
+
